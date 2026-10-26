@@ -1,26 +1,21 @@
-<%-- 
-    Document   : formAltas
-    Created on : 22-oct-2026, 10:20:17
-    Author     : afric
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%-- <%@page import="controlador.Segundo" %> --%>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Form altas</title>
-    </head>
-    <body>
-        <h1>Formulario de Altas</h1>
-        
-        <h3>Introduce los datos:</h3>
-        
-        <form action="ProcesoVariableServlet" method="post">
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Empleados</title>
+</head>
+<body>
+    <h1>Formulario de Altas</h1>
+    </hr>
+    <h3>Introduce los datos del empleado:</h3>
+    </hr>
+    <form action="segundo" method="post">
         <table border="1" cellpadding="6" cellspacing="0">
             <tr>
                 <td><label for="numEmpleado">Nº Empleado:</label></td>
-                <td><input type="number" <%-- step="any" --%> name="numEmpleado" id="numEmpleado" required></td> <%-- step="any" permite cualquier dígito, con o sin decimales, negativos, etc --%>
+                <td><input type="number" step="any" name="numEmpleado" id="numEmpleado" required></td>
             </tr>
             <tr>
                 <td><label for="nombre">Nombre:</label></td>
@@ -55,10 +50,8 @@
         <br/>
 
         <div>
-            <button type="submit" name="accion" value="1">Insertar un empleado</button>
-            <button type="submit" name="accion" value="2" formnovalidate>Mostrar detalles de Empleados</button>
-            <button type="submit" name="accion" value="3">Modificar Empleado</button>
-            <button type="submit" name="accion" value="4">Despedir empleado</button>
+            <button type="submit" >Insertar un empleado</button>
+            <button type="reset">Limpiar campos</button>
         </div>
     </form>
 </body>

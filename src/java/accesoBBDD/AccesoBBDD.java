@@ -1,6 +1,4 @@
 package accesoBBDD;
-import java.io.IOException;
-import static java.lang.System.*;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -25,8 +23,7 @@ public class AccesoBBDD {
     public static Empleado showEmpleado(int empno) throws DAOException{
         String query = "SELECT * FROM emp WHERE empno = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PWD);
-                PreparedStatement stmt = conn.prepareStatement(query);
-                ) {
+                PreparedStatement stmt = conn.prepareStatement(query);) {
             stmt.setInt(1, empno);
             ResultSet rs = stmt.executeQuery(query);
             
@@ -46,17 +43,23 @@ public class AccesoBBDD {
         }
     }
     
-    public static void addEmpleado (int empno, String ename, String job, Integer mgr, Date hireDate, double sal, Integer comm, int deptno) throws DAOException {
+    public static String addEmpleado (int empno, String ename, String job, Integer mgr, Date hireDate, double sal, Integer comm, int deptno) throws DAOException {
         String valores = empno + ", " + ename + ", " + job + ", " + mgr + ", " +  hireDate + ", " + sal + ", " + comm + ", " + deptno;
         String query = "INSERT INTO emp VALUES (?)"; // (empno, ename, job, mgr, hiredate, sal, comm, deptno)
-        try (Connection conn = DriverManager.getConnection(URL, USER, PWD);
-                PreparedStatement ps = conn.prepareStatement(query);
-                ) {
-            ps.setString(1, query);
-            ResultSet rs = ps.executeQuery();
-            
-            rs.close();
+        String msj;
         
+        try (Connection conn = DriverManager.getConnection(URL, USER, PWD);
+                PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, query);
+            int resultado = ps.executeUpdate();
+            
+            
+            if (resultado > 0) {
+                msj = "¡Actualizado con éxito!";
+            } else {
+                msj = "No se ha actualizado";
+            }
+        return msj;
         } catch (SQLException e) {
             throw new DAOException(e);
         }
@@ -103,7 +106,7 @@ public class AccesoBBDD {
         }
     }
     
-    public static void modifyEmpleado(int empnoACambiar, String newEname, String newJob, Integer newMgr, Date newHireDate, double newSal, Integer newComm, int newDeptno) throws DAOException {
+    public static int modifyEmpleado(int empnoACambiar, String newEname, String newJob, Integer newMgr, Date newHireDate, double newSal, Integer newComm, int newDeptno) throws DAOException {
         String query = "UPDATE emp SET ? WHERE ?";
         String values = empnoACambiar + ", " + newEname + ", " + newJob + ", " + newMgr + ", " +  newHireDate + ", " + newSal + ", " + newComm + ", " + newDeptno;
         
@@ -111,6 +114,10 @@ public class AccesoBBDD {
                 PreparedStatement ps = conn.prepareStatement(query);) {
             ps.setString(1, values);
             ps.setInt(2, empnoACambiar);
+            
+            int numCambios = ps.executeUpdate();
+            return numCambios;
+            
         } catch (SQLException e) {
             throw new DAOException(e);
         }
