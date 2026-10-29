@@ -26,7 +26,7 @@ public class Segundo extends HttpServlet {
     boolean testigoActualizar = false;
     String fase;
     Empleado emp;
-    Cookie cookieNumOp, cookieLastOp;
+    // Cookie cookieNumOp, cookieLastOp;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -35,6 +35,24 @@ public class Segundo extends HttpServlet {
         sesion = request.getSession();
         opcion = (String) sesion.getAttribute("variable");
         fase = (String) sesion.getAttribute("fase");
+
+        Cookie[] cookies = request.getCookies();
+        Cookie contador = null;
+
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if ("contador".equals(c.getName())) {
+                    contador = c;
+                    break;
+                }
+            }
+        }
+        if (contador == null) {
+            contador = new Cookie("contador", "0");
+        }
+
+        contador.setValue(Integer.parseInt(contador.getValue()) + 1 + "");
+        response.addCookie(contador);
 
         switch (opcion) {
             case "1":
@@ -50,39 +68,12 @@ public class Segundo extends HttpServlet {
                 mensaje = Crud.darAlta(id, nombre, trabajo, manager, fechaContrato, salario, comision, numDepartamento);
                 sesion.setAttribute("mensaje", mensaje);
 
-                if (cookieNumOp != null) { // && cookieNumOp.getValue() != null
-                    contCookie = Integer.parseInt(cookieNumOp.getValue());
-                } else {
-                    if (cookieNumOp.getValue()!= null){
-                    cookieNumOp.setValue( String.valueOf(Integer.parseInt(cookieNumOp.getValue())+1) );
-                    } else {
-                        cookieNumOp.setValue("0");
-                    }
-                    contCookie = 0;
-                }
-                cookieNumOp = new Cookie("numOp", String.valueOf(cookieNumOp.getValue() + contCookie));
-                response.addCookie(cookieNumOp);
-
-                cookieNumOp = new Cookie("lastOp", String.valueOf(Timestamp.valueOf(LocalDateTime.now())));
-                response.addCookie(cookieLastOp);
-
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
             case "2":
                 id = Integer.parseInt(request.getParameter("numEmpleado"));
                 mensaje = Crud.darBaja(id);
                 sesion.setAttribute("mensaje", mensaje);
-
-                if (cookieNumOp.getValue() != null) {
-                    contCookie = Integer.parseInt(cookieNumOp.getValue());
-                } else {
-                    contCookie = 0;
-                }
-                cookieNumOp = new Cookie("numOp", String.valueOf(cookieNumOp.getValue() + contCookie));
-                response.addCookie(cookieNumOp);
-
-                cookieNumOp = new Cookie("lastOp", String.valueOf(Timestamp.valueOf(LocalDateTime.now())));
-                response.addCookie(cookieLastOp);
 
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
@@ -92,17 +83,6 @@ public class Segundo extends HttpServlet {
                     emp = Crud.consultaRegistro(id);
                     sesion.setAttribute("empleado", emp);
                     sesion.setAttribute("fase", "fase2");
-
-                    if (cookieNumOp.getValue() != null) {
-                        contCookie = Integer.parseInt(cookieNumOp.getValue());
-                    } else {
-                        contCookie = 0;
-                    }
-                    cookieNumOp = new Cookie("numOp", String.valueOf(cookieNumOp.getValue() + contCookie));
-                    response.addCookie(cookieNumOp);
-
-                    cookieNumOp = new Cookie("lastOp", String.valueOf(Timestamp.valueOf(LocalDateTime.now())));
-                    response.addCookie(cookieLastOp);
 
                     request.getRequestDispatcher("/formAct.jsp").forward(request, response);
                 } else {
@@ -116,17 +96,6 @@ public class Segundo extends HttpServlet {
                     mensaje = Crud.actualizarRegistro(id, nombre, trabajo, manager, fechaContrato, salario, comision, numDepartamento);
                     sesion.setAttribute("mensaje", mensaje);
 
-                    if (cookieNumOp.getValue() != null) {
-                        contCookie = Integer.parseInt(cookieNumOp.getValue());
-                    } else {
-                        contCookie = 0;
-                    }
-                    cookieNumOp = new Cookie("numOp", String.valueOf(cookieNumOp.getValue() + contCookie));
-                    response.addCookie(cookieNumOp);
-
-                    cookieNumOp = new Cookie("lastOp", String.valueOf(Timestamp.valueOf(LocalDateTime.now())));
-                    response.addCookie(cookieLastOp);
-
                     request.getRequestDispatcher("/index.jsp").forward(request, response);
                 }
 
@@ -135,17 +104,6 @@ public class Segundo extends HttpServlet {
                 /* mensaje = Crud.mostrarListado(); // Hecho en "Principal" (Servlet)
                 sesion.setAttribute("mensaje", mensaje); */
 
-                if (cookieNumOp.getValue() != null) {
-                    contCookie = Integer.parseInt(cookieNumOp.getValue());
-                } else {
-                    contCookie = 0;
-                }
-                cookieNumOp = new Cookie("numOp", String.valueOf(cookieNumOp.getValue() + contCookie));
-                response.addCookie(cookieNumOp);
-
-                cookieNumOp = new Cookie("lastOp", String.valueOf(Timestamp.valueOf(LocalDateTime.now())));
-                response.addCookie(cookieLastOp);
-
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
             case "5":
@@ -153,17 +111,6 @@ public class Segundo extends HttpServlet {
                 mensaje = Crud.consultaRegistro(id); // Hecho en "Principal" (Servlet)
                 mensaje = "";
                 sesion.setAttribute("mensaje", mensaje); */
-
-                if (cookieNumOp.getValue() != null) {
-                    contCookie = Integer.parseInt(cookieNumOp.getValue());
-                } else {
-                    contCookie = 0;
-                }
-                cookieNumOp = new Cookie("numOp", String.valueOf(cookieNumOp.getValue() + contCookie));
-                response.addCookie(cookieNumOp);
-
-                cookieNumOp = new Cookie("lastOp", String.valueOf(Timestamp.valueOf(LocalDateTime.now())));
-                response.addCookie(cookieLastOp);
 
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;

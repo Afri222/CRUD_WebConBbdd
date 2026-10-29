@@ -5,7 +5,7 @@
         <title>Pagina Principal</title>
     </head>
     <body>
-        <h1>CRUD </h1> <br/>
+        <h1>CRUD </h1>
         <%
             String mensaje = "";
             HttpSession sesion = request.getSession();
@@ -13,7 +13,9 @@
             if (mensaje != null) {
         %>
 
-        </hr><h2><%=mensaje%></h2></marquee><hr/> 
+        <hr>
+        <h2><%=mensaje%></h2></marquee>
+        <hr> 
 
     <%}%>
     <br/>
