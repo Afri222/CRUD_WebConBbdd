@@ -5,24 +5,25 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Crud {
-
     private static final String URL = "jdbc:mariadb://localhost:3306/empresa";
     private static final String USER = "root";
-    private static final String PWD = "profesor";
+    private static final String PASSWORD = "profesor";
 
     public static String darAlta(int numEmpleado, String nombre, String trabajo, int manager,
             Date fechaContrato, int salario, int comision, int numDepartamento) {
         try {
-            Class.forName("org.mariadb.jdbc.Driver");
-            } catch (ClassNotFoundException ex) {
+            Class.forName("org.mariadb.jdbc.Driver"); // Recarga el Driver
+        } catch (ClassNotFoundException ex) {
             return "No se encuentra el driver!";
         }
         String sql = "INSERT INTO emp(empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection insertarConexion = DriverManager.getConnection(URL, USER, PWD); 
-             PreparedStatement preparadoStmt = insertarConexion.prepareStatement(sql)) {
+        try (Connection insertarConexion = DriverManager.getConnection(URL, USER, PASSWORD);
+                PreparedStatement preparadoStmt = insertarConexion.prepareStatement(sql)) {
 
             preparadoStmt.setInt(1, numEmpleado);
             preparadoStmt.setString(2, nombre);
@@ -38,19 +39,14 @@ public class Crud {
             if (filasAfectadas > 0) {
                 return "¡El registro se ha dado de alta correctamente!";
             }
-
         } catch (SQLException e) {
             return "Error al intentar insertar el registro: " + e.getMessage();
         }
         return "No se ha podido dar de alta el registro.";
     }
-    /*
-    public static void main(String[] args){
-    LocalDate localDate = LocalDate.of(2026, 10, 24);
-    Date fecha = Date.valueOf(localDate);
-    Crud.darAlta(9, "Ernesto", "DA2D1A", 123, fecha, 1234, 1230, 1);
-    }*/
 
+    //----------------------------------------------------------------------------------------------------------------------------------------
+    
     public static String darBaja(int numEmpleado) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
@@ -58,73 +54,123 @@ public class Crud {
             return "No se encuentra el driver!";
         }
         
-        String query = "DELETE FROM emp WHERE empno = ?";
+        String sql = "DELETE FROM emp WHERE  empno=?";
         
-        try (Connection conn = DriverManager.getConnection(URL, USER, PWD);
-                PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, numEmpleado);
-            ps.executeUpdate();
-            
-            return "¡Empleado dado de baja con éxito!";
+        try (Connection insertarConexion = DriverManager.getConnection(URL, USER, PASSWORD);
+                PreparedStatement preparadoStmt = insertarConexion.prepareStatement(sql)) {
+            preparadoStmt.setInt(1, numEmpleado);
+
+            int filasAfectadas = preparadoStmt.executeUpdate();
+
+            if (filasAfectadas == 1) {
+                return "¡El registro se ha eliminado correctamente!";
+            }
+            return "No se ha podido eliminar el registro o algo ha salido mal.";
         } catch (SQLException e) {
-            return "Error al intentar borrar el registro: " + e.getMessage();
+            return "Error al intentar eliminar el registro: " + e.getMessage();
         }
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public static String actualizar(int empno, String newEname, String newJob, int newMgr, Date newHireDate, int newSal, int newComm, int newDeptno) {
+
+    //----------------------------------------------------------------------------------------------------------------------------------------
+    public static String actualizarRegistro(int numEmpleado, String nombre, String trabajo, int manager,
+            Date fechaContrato, int salario, int comision, int numDepartamento) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             return "No se encuentra el driver!";
         }
-        
-        String query = "UPDATE emp WHERE empno=? SET ename=?, job=?, mgr=?, hiredate=?, sal=?, comm=?, deptno=?";
-        
-        try (Connection conn = DriverManager.getConnection(URL, USER, PWD);
-                PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, empno);
-            ps.setString(2, newEname);
-            ps.setString(3, newJob);
-            ps.setInt(4, newMgr);
-            ps.setDate(5, newHireDate);
-            ps.setInt(6, newSal);
-            ps.setInt(7, newComm);
-            ps.setInt(8, newDeptno);
-            
-            ps.executeUpdate();
-            return "¡Empleado actualizado con éxito!";
-            
+        String sql = "UPDATE emp SET  ename= ?,job= ?,mgr= ?,hiredate= ?,sal= ?,comm= ?,deptno= ? WHERE empno=?  ";
+
+        try (Connection insertarConexion = DriverManager.getConnection(URL, USER, PASSWORD);
+                PreparedStatement preparadoStmt = insertarConexion.prepareStatement(sql)) {
+            preparadoStmt.setString(1, nombre);
+            preparadoStmt.setString(2, trabajo);
+            preparadoStmt.setInt(3, manager);
+            preparadoStmt.setDate(4, fechaContrato);
+            preparadoStmt.setInt(5, salario);
+            preparadoStmt.setInt(6, comision);
+            preparadoStmt.setInt(7, numDepartamento);
+            preparadoStmt.setInt(8, numEmpleado);
+
+            int filasAfectadas = preparadoStmt.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                return "¡El registro se ha actualizado correctamente!";
+            }
         } catch (SQLException e) {
             return "Error al actualizar el registro: " + e.getMessage();
         }
-        
+        return "No se ha podido actualizar el registro.";
     }
+
+    //----------------------------------------------------------------------------------------------------------------------------------------
     
-    public static String mostrarEmpleado(int empno) {
+    public static Empleado consultaRegistro(int numEmpleado) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
-            return "No se encuentra el driver!";
+            return null;
         }
-        
-        String query = "SELECT * FROM emp WHERE empno = ?";
-        
-        try (Connection conn = DriverManager.getConnection(URL, USER, PWD);
-                PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setInt(1, empno);
-            try (ResultSet rs = ps.executeQuery();) {
-                
-                
-                
-                return "¡Empleado mostrado con éxito!";
+        String sql = "SELECT * FROM emp WHERE empno=?";
+
+        try (Connection insertarConexion = DriverManager.getConnection(URL, USER, PASSWORD);
+                PreparedStatement preparadoStmt = insertarConexion.prepareStatement(sql)) {
+            preparadoStmt.setInt(1, numEmpleado);
+            try (ResultSet rs = preparadoStmt.executeQuery()) {
+                String ename = rs.getString("ename");
+                String job = rs.getString("job");
+                Integer mgr = Integer.parseInt(rs.getString("mgr"));
+                Date hireDate = rs.getDate("hireDate");
+                int sal = rs.getInt("sal");
+                Integer comm = Integer.parseInt(rs.getString("comm"));
+                int deptno = rs.getInt("deptno");
+                return new Empleado(numEmpleado, ename, job, mgr, hireDate, sal, comm, deptno);
             }
         } catch (SQLException e) {
-            return "Error al mostrar registro: " + e.getMessage();
+            return null;
         }
     }
     
+    //----------------------------------------------------------------------------------------------------------------------------------------
     
-    
+    public static ArrayList<Empleado> mostrarListado() {
+        try {
+            Class.forName("org.mariadb.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            return null;
+        }
+        String sql = "SELECT * FROM emp";
+
+        try (Connection insertarConexion = DriverManager.getConnection(URL, USER, PASSWORD);
+                PreparedStatement preparadoStmt = insertarConexion.prepareStatement(sql)) {
+            ArrayList<Empleado> emps = new ArrayList<>();
+            int empno;
+                String ename;
+                String job;
+                Integer mgr;
+                Date hireDate;
+                int sal;
+                Integer comm;
+                int deptno;
+
+            try (ResultSet rs = preparadoStmt.executeQuery()) {
+                while (rs.next()) {
+                    empno = rs.getInt("empno");
+                    ename = rs.getString("ename");
+                    job = rs.getString("job");
+                    mgr = Integer.parseInt(rs.getString("mgr"));
+                    hireDate = rs.getDate("hireDate");
+                    sal = rs.getInt("sal");
+                    comm = Integer.parseInt(rs.getString("comm"));
+                    deptno = rs.getInt("deptno");
+                    emps.add(new Empleado(empno, ename, job, mgr, hireDate, sal, comm, deptno));
+                }
+            }
+            return emps;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
 }
+
+// (int empno, String ename, String job, Integer mgr, Date hireDate, int sal, Integer comm, int deptno)

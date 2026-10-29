@@ -33,7 +33,7 @@ public class AccesoBBDD {
                 String job = rs.getString(3); // out.print(rs.getString("Job" + " "));
                 Integer mgr = Integer.parseInt(rs.getString(4));
                 Date hireDate = rs.getDate(5);
-                double sal = rs.getInt(6);
+                int sal = rs.getInt(6);
                 Integer comm = rs.getInt(7);
                 int deptno = rs.getInt(8);
             rs.close();
@@ -43,27 +43,25 @@ public class AccesoBBDD {
         }
     }
     
-    public static String addEmpleado (int empno, String ename, String job, Integer mgr, Date hireDate, double sal, Integer comm, int deptno) throws DAOException {
+    public static String addEmpleado (int empno, String ename, String job, Integer mgr, Date hireDate, int sal, Integer comm, int deptno) throws DAOException {
         String valores = empno + ", " + ename + ", " + job + ", " + mgr + ", " +  hireDate + ", " + sal + ", " + comm + ", " + deptno;
         String query = "INSERT INTO emp VALUES (?)"; // (empno, ename, job, mgr, hiredate, sal, comm, deptno)
         String msj;
         
         try (Connection conn = DriverManager.getConnection(URL, USER, PWD);
                 PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setString(1, query);
+            ps.setString(1, valores);
             int resultado = ps.executeUpdate();
-            
             
             if (resultado > 0) {
                 msj = "¡Actualizado con éxito!";
             } else {
-                msj = "No se ha actualizado";
+                msj = "No se ha actualizado correctamente.";
             }
         return msj;
         } catch (SQLException e) {
             throw new DAOException(e);
         }
-        
     }
     
     public static List<Empleado> showAllEmpleados() throws DAOException{
@@ -79,10 +77,9 @@ public class AccesoBBDD {
                 String job = rs.getString(3); // out.print(rs.getString("Job" + " "));
                 Integer mgr = Integer.parseInt(rs.getString(4));
                 Date hireDate = rs.getDate(5);
-                double sal = rs.getInt(6);
+                int sal = rs.getInt(6);
                 Integer comm = rs.getInt(7);
                 int deptno = rs.getInt(8);
-                
                 emps.add(new Empleado(id, name, job, mgr, hireDate, sal, comm, deptno));
             }
             return emps;
@@ -98,9 +95,14 @@ public class AccesoBBDD {
                 PreparedStatement ps = conn.prepareStatement(query);) {
             ps.setInt(1, empno);
             
-            ResultSet rs = ps.executeQuery();
+            int ñ = ps.executeUpdate();
             
-            rs.close();
+            /* if (ñ > 0)
+                Eliminado correctamente
+            else
+                No eliminado o algo salió mal
+            */
+                
         } catch (SQLException e) {
             throw new DAOException(e);
         }

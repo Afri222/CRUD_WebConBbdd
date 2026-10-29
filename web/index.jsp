@@ -23,10 +23,10 @@
             <input type="button" onclick="enviarFormulario(1)" value="Alta empleado"></br></br>
             <input type="button" onclick="enviarFormulario(2)" value="Baja empleado"></br></br>
             <input type="button" onclick="enviarFormulario(3)" value="Actualizar registro"></br></br>
-            <input type="button" onclick="enviarFormulario(4)" value="Listado de empleados"></br></br>
+            <input type="button" onclick="enviarFormulario(4)" value="Datos empleado"></br></br>
+            <input type="button" onclick="enviarFormulario(5)" value="Listado de empleados"></br></br>
 
             <input type="hidden" id="botonElegido" value="" name="variable">
-
         </div>
     </form>
 

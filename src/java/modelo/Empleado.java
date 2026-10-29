@@ -12,11 +12,11 @@ public class Empleado {
     private String job;
     private Integer mgr;
     private Date hireDate;
-    private double sal;
+    private int sal;
     private Integer comm;
     private int deptno;
 
-    public Empleado(int empno, String ename, String job, Integer mgr, Date hireDate, double sal, Integer comm, int deptno) {
+    public Empleado(int empno, String ename, String job, Integer mgr, Date hireDate, int sal, Integer comm, int deptno) {
         this.empno = empno;
         this.ename = ename;
         this.job = job;
@@ -67,11 +67,11 @@ public class Empleado {
         this.hireDate = hireDate;
     }
 
-    public double getSal() {
+    public int getSal() {
         return sal;
     }
 
-    public void setSal(double sal) {
+    public void setSal(int sal) {
         this.sal = sal;
     }
 
