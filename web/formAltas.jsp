@@ -15,7 +15,7 @@
         <table border="1" cellpadding="6" cellspacing="0">
             <tr>
                 <td><label for="numEmpleado">Nº Empleado:</label></td>
-                <td><input type="number" step="any" min="1" max="4" name="numEmpleado" id="numEmpleado" required></td>
+                <td><input type="number" step="any" min="1" max="9999" name="numEmpleado" id="numEmpleado" required></td>
             </tr>
             <tr>
                 <td><label for="nombre">Nombre:</label></td>
@@ -27,7 +27,7 @@
             </tr>
             <tr>
                 <td><label for="manager">Nº Manager:</label></td>
-                <td><input type="number" step="any" name="manager" id="manager"></td>
+                <td><input type="number" step="any" min="1" max="9999" name="manager" id="manager"></td>
             </tr>
             <tr>
                 <td><label for="fechaContratado">Fecha Contratación:</label></td>
@@ -35,11 +35,11 @@
             </tr>
             <tr>
                 <td><label for="salario">Salario:</label></td>
-                <td><input type="number" step="0.01" name="salario" id="salario" required></td>
+                <td><input type="number" step="0.01" name="salario" min="1" id="salario" required></td>
             </tr>
             <tr>
                 <td><label for="comision">Comisión:</label></td>
-                <td><input type="number" step="0.01" name="comision" id="comision"></td>
+                <td><input type="number" step="0.01" name="comision" min="0.00" max="" id="comision"></td>
             </tr>
             <tr>
                 <td><label for="numDepartamento">Nº Departamento:</label></td>
@@ -55,7 +55,7 @@
         </div>
     </form>
     
-    <form action="" method="post">
+    <form action="segundo" method="post">
         <input type="hidden" name="cancelar" value="true">
         <button type="submit" name="volver"><label for="volver">Volver</label></button>
     </form>

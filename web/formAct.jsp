@@ -21,56 +21,56 @@
             Empleado emp = (Empleado) sesion.getAttribute("empleado");
         %>
         <hr>
-        <h3>Introduce el identificador del empleado:</h3>
-        <hr>
 
+        <input type="hidden" id="fase" value="fase2" name="fase">
+        <%
+            if (emp != null) {
+        %>
         <form action="segundo" method="post">
-            <table border="1" cellpadding="6" cellspacing="0">
+            <input type="hidden" name="cancelar" value="false">
 
+            <table border="1" cellpadding="6" cellspacing="0">
                 <td><label for="nombre">Nombre:</label></td>
-                <td><input type="text" name="nombre" id="nombre" placeholder="${emp.getEname()}" required></td>
+                <td><input type="text" name="nombre" id="nombre" maxlength="10" value="${emp.getEname()}" required></td>
                 </tr>
                 <tr>
                     <td><label for="trabajo">Puesto / Trabajo:</label></td>
-                    <td><input type="text" name="trabajo" id="trabajo" placeholder=${emp.getJob()} required></td>
+                    <td><input type="text" name="trabajo" id="trabajo" maxlength="9" value=${emp.getJob()} required></td>
                 </tr>
                 <tr>
                     <td><label for="manager">Nº Manager:</label></td>
-                    <td><input type="number" step="any" name="manager" id="manager" placeholder=${emp.getMgr()}></td>
+                    <td><input type="number" step="any" name="manager" min="1" max="9999" maxlength="11" id="manager" value=${emp.getMgr()}></td>
                 </tr>
                 <tr>
                     <td><label for="fechaContratado">Fecha Contratación:</label></td>
-                    <td><input type="date" name="fechaContratado" id="fechaContratado" placeholder=${emp.getHireDate()} required></td>
+                    <td><input type="date" name="fechaContratado" id="fechaContratado" value=${emp.getHireDate()} required></td>
                 </tr>
                 <tr>
                     <td><label for="salario">Salario:</label></td>
-                    <td><input type="number" step="0.01" name="salario" id="salario" placeholder=${emp.getSal()} required></td>
+                    <td><input type="number" step="0.01" name="salario" min="1" maxlength="11" id="salario" value=${emp.getSal()} required></td>
                 </tr>
                 <tr>
                     <td><label for="comision">Comisión:</label></td>
-                    <td><input type="number" step="0.01" name="comision" id="comision" placeholder=${emp.getComm()}></td>
+                    <td><input type="number" step="0.01" name="comision" id="comision" maxlength="11" placeholder=${emp.getComm()}></td>
                 </tr>
                 <tr>
                     <td><label for="numDepartamento">Nº Departamento:</label></td>
-                    <td><input type="number" step="any" name="numDepartamento" id="numDepartamento" placeholder=${emp.getDeptno()} required></td>
+                    <td><input type="number" step="any" name="numDepartamento" min="1" max="9999" maxlength="11" id="numDepartamento" placeholder=${emp.getDeptno()} required></td>
                 </tr>
             </table>
             <br/>
             <div>
-                <button type="submit" >ACTUALIZAR</button>
+                <button type="submit" >Actualizar campo/s</button>
                 <button type="reset">Limpiar campos</button>
             </div>
         </form>
-        <form action="principal" method="post">
-            <input type="button" onclick="enviarFormulario(cancelar)" value="Volver"><br>
-            <%-- <button type="sumbit" value="volver"><label for="volver">Volver</label></button> --%>
+        <%
+            } else {
+        %> No se pudo leer el registro. <% }%>
+        <form action="segundo" method="post">
+            <input type="hidden" name="cancelar" value="true">
+            <button type="submit" name="volver"><label for="volver">Volver</label></button>
         </form>
-        <script>
-            function enviarFormulario(valor) {
-                document.getElementById("botonElegido").value = valor;
-                document.getElementById("menuPrincipal").submit();
-            }
-        </script>
     </body>
 </html>
 

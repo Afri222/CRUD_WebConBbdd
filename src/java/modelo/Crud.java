@@ -6,32 +6,33 @@ import java.sql.SQLException;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Crud {
-    private static final String URL = "jdbc:mariadb://localhost:3306/empresa";
+    private static final String URL = "jdbc:mariadb://localhost:3306/empleado";
     private static final String USER = "root";
-    private static final String PASSWORD = "profesor";
+    private static final String PASSWORD = "alumno";
 
-    public static String darAlta(int numEmpleado, String nombre, String trabajo, int manager,
-            Date fechaContrato, int salario, int comision, int numDepartamento) {
+    public static String darAlta(int numEmpleado, String nombre, String trabajo, int manager, Date fechaContrato, int salario, int comision, int numDepartamento) {
         try {
             Class.forName("org.mariadb.jdbc.Driver"); // Recarga el Driver
         } catch (ClassNotFoundException ex) {
             return "No se encuentra el driver!";
         }
-        String sql = "INSERT INTO emp(empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO emp(empno,ename,job,mgr,hiredate,sal,comm,deptno) VALUES (?, ?, ?,   ?,   ?,    ?,    ?, ?)";
 
         try (Connection insertarConexion = DriverManager.getConnection(URL, USER, PASSWORD);
                 PreparedStatement preparadoStmt = insertarConexion.prepareStatement(sql)) {
-
             preparadoStmt.setInt(1, numEmpleado);
             preparadoStmt.setString(2, nombre);
             preparadoStmt.setString(3, trabajo);
+            
             preparadoStmt.setInt(4, manager);
+            
             preparadoStmt.setDate(5, fechaContrato);
             preparadoStmt.setInt(6, salario);
+            
             preparadoStmt.setInt(7, comision);
+            
             preparadoStmt.setInt(8, numDepartamento);
 
             int filasAfectadas = preparadoStmt.executeUpdate();
@@ -39,10 +40,10 @@ public class Crud {
             if (filasAfectadas > 0) {
                 return "¡El registro se ha dado de alta correctamente!";
             }
+            return "No se ha podido dar de alta el registro.";
         } catch (SQLException e) {
             return "Error al intentar insertar el registro: " + e.getMessage();
         }
-        return "No se ha podido dar de alta el registro.";
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------------
@@ -59,7 +60,6 @@ public class Crud {
         try (Connection insertarConexion = DriverManager.getConnection(URL, USER, PASSWORD);
                 PreparedStatement preparadoStmt = insertarConexion.prepareStatement(sql)) {
             preparadoStmt.setInt(1, numEmpleado);
-
             int filasAfectadas = preparadoStmt.executeUpdate();
 
             if (filasAfectadas == 1) {
@@ -72,14 +72,13 @@ public class Crud {
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------------
-    public static String actualizarRegistro(int numEmpleado, String nombre, String trabajo, int manager,
-            Date fechaContrato, int salario, int comision, int numDepartamento) {
+    public static String actualizarRegistro(int numEmpleado, String nombre, String trabajo, int manager, Date fechaContrato, int salario, int comision, int numDepartamento) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             return "No se encuentra el driver!";
         }
-        String sql = "UPDATE emp SET  ename= ?,job= ?,mgr= ?,hiredate= ?,sal= ?,comm= ?,deptno= ? WHERE empno=?  ";
+        String sql = "UPDATE emp SET  ename= ?,job= ?,mgr= ?,hiredate= ?,sal= ?,comm= ?,deptno= ? WHERE empno=? ";
 
         try (Connection insertarConexion = DriverManager.getConnection(URL, USER, PASSWORD);
                 PreparedStatement preparadoStmt = insertarConexion.prepareStatement(sql)) {
@@ -97,10 +96,10 @@ public class Crud {
             if (filasAfectadas > 0) {
                 return "¡El registro se ha actualizado correctamente!";
             }
+            return "No se ha podido actualizar el registro.";
         } catch (SQLException e) {
             return "Error al actualizar el registro: " + e.getMessage();
         }
-        return "No se ha podido actualizar el registro.";
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------------
@@ -140,7 +139,7 @@ public class Crud {
             return null;
         }
         String sql = "SELECT * FROM emp";
-
+        
         try (Connection insertarConexion = DriverManager.getConnection(URL, USER, PASSWORD);
                 PreparedStatement preparadoStmt = insertarConexion.prepareStatement(sql)) {
             ArrayList<Empleado> emps = new ArrayList<>();
@@ -152,16 +151,17 @@ public class Crud {
                 int sal;
                 Integer comm;
                 int deptno;
+                String aux;
 
             try (ResultSet rs = preparadoStmt.executeQuery()) {
                 while (rs.next()) {
                     empno = rs.getInt("empno");
                     ename = rs.getString("ename");
                     job = rs.getString("job");
-                    mgr = Integer.parseInt(rs.getString("mgr"));
+                    mgr = rs.getInt("mgr");
                     hireDate = rs.getDate("hireDate");
                     sal = rs.getInt("sal");
-                    comm = Integer.parseInt(rs.getString("comm"));
+                    comm = rs.getInt("comm");
                     deptno = rs.getInt("deptno");
                     emps.add(new Empleado(empno, ename, job, mgr, hireDate, sal, comm, deptno));
                 }

@@ -1,6 +1,7 @@
 package controlador;
-
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +16,7 @@ import modelo.Empleado;
 @WebServlet(name = "principal", urlPatterns = {"/principal"})
 public class Principal extends HttpServlet {
     String opcion = "";
+    String sinEspacios;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -30,6 +32,13 @@ public class Principal extends HttpServlet {
         Cookie contador = new Cookie("numOp", "0"); // String.valueOf(cookieNumOp.getValue() + contCookie)
         contador.setMaxAge(600);
         response.addCookie(contador);
+        
+        sinEspacios = Timestamp.valueOf(LocalDateTime.now()) + "";
+        sinEspacios = sinEspacios.replaceAll(" ", "_");
+        Cookie ultimaOperacion = new Cookie("ultimaOperacion", sinEspacios); // String.valueOf(cookieNumOp.getValue() + contCookie)
+        ultimaOperacion.setMaxAge(600);
+        response.addCookie(ultimaOperacion);
+        
         
         /*
         if (cookieNumOp.getValue() != null) {
@@ -57,13 +66,11 @@ public class Principal extends HttpServlet {
                     break;
 
                 case "3":
-                    request.getRequestDispatcher("/formAct.jsp").forward(request, response);
+                    request.getRequestDispatcher("/formActId.jsp").forward(request, response);
                     break;
                     
                 case "4":
-                    emp = Crud.consultaRegistro(0);
-                    sesion.setAttribute("empleado", emp);
-                    request.getRequestDispatcher("").forward(request, response);
+                    request.getRequestDispatcher("formConsulta.jsp").forward(request, response);
                     break;
                     
                 case "5":

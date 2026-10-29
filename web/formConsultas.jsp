@@ -23,7 +23,7 @@
         %>
 
         <% if (listado != null) { %>
-        <table>
+        <table border="9" cellpadding="3">
             <tr>
                 <th> Empno </th>
                 <th> Ename </th>
@@ -35,53 +35,49 @@
                 <th> Deptno </th>
             </tr>
             <% for (Empleado e2 : listado) {%>
-                <tr>
-                    <td><%= e2.getEmpno()%></td>
-                    <td><%= e2.getEname()%></td>
-                    <td><%= e2.getJob()%></td>
-                    <td><%= e2.getMgr()%></td>
-                    <td><%= e2.getHireDate()%></td>
-                    <td><%= e2.getSal()%></td>
-                    <td><%= e2.getComm()%></td>
-                    <td><%= e2.getDeptno()%></td>
-                </tr>
+            <tr>
+                <td><%= e2.getEmpno()%></td>
+                <td><%= e2.getEname()%></td>
+                <td><%= e2.getJob()%></td>
+                <td><%= e2.getMgr()%></td>
+                <td><%= e2.getHireDate()%></td>
+                <td><%= e2.getSal()%></td>
+                <td><%= e2.getComm()%></td>
+                <td><%= e2.getDeptno()%></td>
+            </tr>
             <% } %>
 
         </table>
-        <% } else if (e != null) { %>
-            <table>
-                <tr>
-                    <th> Empno </th>
-                    <th> Ename </th>
-                    <th> Job </th>
-                    <th> Mgr </th>
-                    <th> Hire Date </th>
-                    <th> Sal </th>
-                    <th> Comm </th>
-                    <th> Deptno </th>
-                </tr>
-                <tr>
-                    <td><%= e.getEmpno()%></td>
-                    <td><%= e.getEname()%></td>
-                    <td><%= e.getJob()%></td>
-                    <td><%= e.getMgr()%></td>
-                    <td><%= e.getHireDate()%></td>
-                    <td><%= e.getSal()%></td>
-                    <td><%= e.getComm()%></td>
-                    <td><%= e.getDeptno()%></td>
-                </tr>
-            </table>
+        <% } else if (e != null) {%>
+        <table>
+            <tr>
+                <th> Empno </th>
+                <th> Ename </th>
+                <th> Job </th>
+                <th> Mgr </th>
+                <th> Hire Date </th>
+                <th> Sal </th>
+                <th> Comm </th>
+                <th> Deptno </th>
+            </tr>
+            <tr>
+                <td><%= e.getEmpno()%></td>
+                <td><%= e.getEname()%></td>
+                <td><%= e.getJob()%></td>
+                <td><%= e.getMgr()%></td>
+                <td><%= e.getHireDate()%></td>
+                <td><%= e.getSal()%></td>
+                <td><%= e.getComm()%></td>
+                <td><%= e.getDeptno()%></td>
+            </tr>
+        </table>
         <% } else {%> No hay registros disponibles <% }%>
-
-        <form action="principal" method="post">
-            <input type="button" onclick="enviarFormulario(cancelar)" value="Volver"><br>
-            <%-- <button type="sumbit" value="volver"><label for="volver">Volver</label></button> --%>
+        
+        <br>
+        
+        <form action="segundo" method="post">
+            <input type="hidden" name="cancelar" value="true">
+            <button type="submit" name="volver"><label for="volver">Volver</label></button>
         </form>
-        <script>
-            function enviarFormulario(valor) {
-                document.getElementById("botonElegido").value = valor;
-                document.getElementById("menuPrincipal").submit();
-            }
-        </script>
     </body>
 </html>

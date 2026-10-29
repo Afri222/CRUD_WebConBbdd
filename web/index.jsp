@@ -10,7 +10,7 @@
             String mensaje = "";
             HttpSession sesion = request.getSession();
             mensaje = (String) sesion.getAttribute("mensaje");
-            if (mensaje != null) {
+            if (mensaje != null && !mensaje.isEmpty()) {
         %>
 
         <hr>
